@@ -1,0 +1,54 @@
+scalar ObjectId
+
+# the schema of data and model.
+type User {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+}
+
+#Shape of data can pass in argument.
+input UserInput {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+}
+
+# Handel HTTP GET API
+type Query {
+  user(ID: ID!): User! # indicates that the User type is non-nullable.
+  getUsers(amount: Float): [User] # indicate that the return type is a list or array.
+}
+
+type AuthPayload {
+  token: String!
+}
+
+type userDetail {
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String!
+}
+
+type SubUser {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  _id: ObjectId
+}
+
+type Subscription {
+  userAdded: SubUser
+}
+
+# Handel HTTP POST, PUT, PATCH, DELETE
+type Mutation {
+  createUser(UserInput: UserInput): User!
+  deleteUser(ID: ID!): Boolean
+  editUser(ID: ID!, userInput: UserInput): Boolean
+  userLogin(email: String!, password: String!): AuthPayload!
+}
