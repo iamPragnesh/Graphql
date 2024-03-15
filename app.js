@@ -21,7 +21,7 @@ const typeDefs = fs.readFileSync(
   "utf8"
 );
 
-connectToDataBase();
+connectToDataBase(); 
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
