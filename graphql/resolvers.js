@@ -36,7 +36,11 @@ const resolvers = {
   },
 
   Mutation: {
-    createUser: (_, { UserInput }) => createUser(UserInput),
+    createUser: async (_, { UserInput }) => {
+      const userAdded = await createUser(UserInput);
+      await pubsub.publish("USER_ADDED", { userAdded: userAdded });
+      return userAdded
+    },
     deleteUser: async (_, { ID }, context) => {
       try {
         await authenticator(context.headers.authorization);
@@ -52,9 +56,7 @@ const resolvers = {
   Subscription: {
     userAdded: {
       // Subscribe to userAdded event
-      subscribe: async() => {
-        return pubsub.asyncIterator("USER_ADDED");
-      },
+      subscribe: () => pubsub.asyncIterator("USER_ADDED"),
     },
   },
 };

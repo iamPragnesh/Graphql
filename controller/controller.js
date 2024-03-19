@@ -1,7 +1,5 @@
 import userSchema from "../model/userModel.js";
 import jwt from "jsonwebtoken";
-import { PubSub } from "graphql-subscriptions";
-const pubsub = new PubSub();
 
 export const createUser = async ({ firstName, lastName, email, password }) => {
   const createdUser = new userSchema({
@@ -12,10 +10,6 @@ export const createUser = async ({ firstName, lastName, email, password }) => {
   });
 
   const res = await createdUser.save();
-  console.log(res);
-
-  await pubsub.publish("USER_ADDED", { userAdded: res });
-  
   return res;
 };
 
