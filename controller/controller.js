@@ -1,5 +1,7 @@
 import userSchema from "../model/userModel.js";
 import jwt from "jsonwebtoken";
+import services from "../subscription/subscription.js";
+
 
 export const createUser = async ({ firstName, lastName, email, password }) => {
   const createdUser = new userSchema({
@@ -10,6 +12,7 @@ export const createUser = async ({ firstName, lastName, email, password }) => {
   });
 
   const res = await createdUser.save();
+  await services.publishEvent("USER_ADDED",res);
   return res;
 };
 

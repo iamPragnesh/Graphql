@@ -63,7 +63,4 @@ const PORT = 4000;
 // Now that our HTTP server is fully set up, we can listen to it.
 httpServer.listen(PORT, () => {
   console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
-  console.log(
-    `🚀 Subscription endpoint ready at ws://localhost:${PORT}${server.graphqlPath}`
-  );
 });

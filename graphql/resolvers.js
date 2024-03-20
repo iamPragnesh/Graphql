@@ -8,8 +8,7 @@ import {
 } from "../controller/controller.js";
 import userSchema from "../model/userModel.js";
 import jwt from "jsonwebtoken";
-import { PubSub } from "graphql-subscriptions";
-const pubsub = new PubSub();
+import services from "../subscription/subscription.js";
 
 async function authenticator(token) {
   if (!token) {
@@ -36,11 +35,7 @@ const resolvers = {
   },
 
   Mutation: {
-    createUser: async (_, { UserInput }) => {
-      const userAdded = await createUser(UserInput);
-      await pubsub.publish("USER_ADDED", { userAdded: userAdded });
-      return userAdded
-    },
+    createUser: async (_, { UserInput }) => createUser(UserInput),
     deleteUser: async (_, { ID }, context) => {
       try {
         await authenticator(context.headers.authorization);
@@ -56,7 +51,7 @@ const resolvers = {
   Subscription: {
     userAdded: {
       // Subscribe to userAdded event
-      subscribe: () => pubsub.asyncIterator("USER_ADDED"),
+      subscribe: () => services.getDataEvent("USER_ADDED"),
     },
   },
 };
